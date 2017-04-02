@@ -64,14 +64,14 @@ document.addEventListener('click', function (e) {
         // trigger a new pushstate notification
         var evt = new CustomEvent('pushstate');
         evt.state = curr.href;
-        // being sure it happens after so the new location will be available
+        // being sure it happens after so the new location should be available
         setTimeout(function () {
           // dispatch the event
           dispatchEvent(evt);
           // also trigger Level 0 if possible
           if (window.onpushstate) onpushstate(evt);
         });
-        history.pushState(next.href, document.title, redirect + hash);
+        history.pushState(evt.state, document.title, redirect + hash);
       }
     }
   }
