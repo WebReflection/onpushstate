@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+  <head>
+    <title>onpushstate.js</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+    body { font-family: sans-serif; }
+    body > * { max-width: 280px; margin: auto; }
+    header, footer { text-align: center; }
+    h4, header p, footer { opacity: .7; font-size: .9em; }
+    code { font-size: 1.1em; display: inline-block; }
+    a { color: inherit; text-decoration: none; border-bottom: 1px dotted; }
+    a:hover { border-bottom: 2px solid; }
+    blockquote { position: relative; }
+    blockquote:before, blockquote:after {
+      display: block;
+      position: absolute;
+      font-size: 4em;
+      opacity: .5;
+    }
+    blockquote:before {
+      content: '\201c';
+      left: -.6em;
+      margin-top: -.2em;
+    }
+    blockquote:after {
+      content: '\201d';
+      right: -.5em;
+      margin-top: -.4em;
+    }
+    </style>
+    <script src="min.js" async></script>
+    <script>
+      // addEventListener would do as well
+      window.onpushstate = console.log.bind(console);
+      window.onpopstate = console.log.bind(console);
+    </script>
+  </head>
+  <body>
+    <header id="header">
+      <h1>onpushstate.js</h1>
+      <h4>A seamless history manager with a <code>pushstate</code> notification.</h4>
+      <p>
+        This document explains &amp; tests the library.<br>
+        Each <a title="replaces state with anchor" href="#main">link</a> shows a title describing its action.
+      </p>
+      <hr>
+    </header>
+    <main name="main">
+      <p>
+        I was looking for something simple, like a tiny module,
+        that would do one thing and one only with the browser's <a title="pushes state with anchor" href="./history#history">history</a>.
+      </p>
+      <p>
+        I was looking for a way to intercept a generic page click,
+        a way capable of letting me organize my Web Apps
+        through <a title="opens externally" href="https://developer.mozilla.org/en-US/docs/AJAX">Ajax</a>,
+        or <a title="opens new tab" href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API" target="_blank">fetch</a> calls.
+      </p>
+      <h3 id="history">Missing in History (API)</h2>
+      <p>
+        The mechanism behind the <a title="opens externally" href="https://developer.mozilla.org/en-US/docs/Web/API/History">History API</a> is simple, yet powerful, but it has a little hidden <i>gotcha</i>:
+      </p>
+      <blockquote>
+        Note that just calling <code>history.pushState()</code> or <code>history.replaceState()</code> won't trigger a popstate event.
+      </blockquote>
+      <p>
+        Accordingly, we can always listen to changes when these come from a previous state.
+      </p>
+      <p>
+        This also means every time we invoke a <a title="pushes state" href="pushstate"><code>pushState</code></a>,
+        an action 99% of time used to load some content from the client in order to update only what's needed instead of reloading the whole new page,
+        we need a smart mechanism to react to such state change.
+      </p>
+      <p>
+        Moreover, we most likely don't ever want to listen to anchors on the page, clicked just to scroll elements into the view,
+        and not to trigger a page load action.
+      </p>
+      <p>
+        In these cases, the triggered <code>popstate</code> would be more than unnecessary because we simply just don't care.
+      </p>
+      <h3 id="pushstate">The <code>onpushstate</code> solution.</h3>
+      <p>
+        This tiny library seamlessly brings the following features to any page:
+      </p>
+      <ul>
+        <li>
+          <p>
+            every link<sup><sub>*</sub></sup> <em>to the same origin</em> will <code>pushState</code> and trigger a <code>pushstate</code> event.<br>
+            <sup><sub>*</sub></sup> <small>unless the link has an explicit <code>rel="external"</code> or it's a <code>download</code> one.</small>
+          </p>
+        </li>
+        <li>
+          <p>
+            anchors to page IDs or NAMEs will work as expected but won't trigger a <code>popstate</code> event.
+          </p>
+        </li>
+        <li>
+          <p>
+            states are simply represented full URLs, something you can always analyze and compare via:
+            <code>new URL(hisotry.state)</code>
+          </p>
+        </li>
+      </ul>
+      <p>
+        Feel free to open your browser console and verify all logs.
+      </p>
+      <p>
+        You can always use the <code>history</code> object and its current <code>.state</code> property to understand where does it come from,
+        comparing it with the always available <code>location</code>.
+      </p>
+      <pre>
+// you can compare these two object
+const curr = new URL(location);
+const prev = new URL(history.state);
+      </pre>
+      <h3 name="compatibility">Compatibility</h3>
+      <p>
+        This library is compatible with all modern browsers.
+      </p>
+      <p>
+        Older browsers might need one or more polyfill upfront for:
+      </p>
+      <ul>
+        <li>
+          <p>
+            <a title="opens externally" href="https://github.com/WebReflection/dom4">DOM4</a> features such <code>el.closest('name')</code> and <code>CustomEvent</code>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Window <a title="opens externally" href="https://github.com/Financial-Times/polyfill-service/tree/master/polyfills/URL">URL</a> constructor.
+          </p>
+        </li>
+        <li>
+          <p>
+            Window <a title="opens externally" href="https://github.com/browserstate/history.js">History</a> global object.
+          </p>
+        </li>
+      </ul>
+      <p>
+        To test your target browser either try this page or include this library via unpkg.
+      </p>
+      <pre>
+&lt;script
+  src="//unpkg.com/onpushstate@latest/min.js"
+&gt;&lt;/script&gt;
+      </pre>
+      <hr>
+    </main>
+    <footer id="footer">
+      <p>
+        <a title="replaces state" href="#pushstate">onpushstate</a> is under an <a title="opens without notification" href="LICENSE.txt" rel="external">ISC License</a> &amp;<br>
+        is available on <a title="opens externally" href="//github.com/WebReflection/onpushstate">GitHub</a>
+      </p>
+      <p>
+        <small>Andrea Giammarchi - <a title="my Twitter account" href="https://twitter.com/WebReflection/">@WebReflection</a></small>
+      </p>
+    </footer>
+  </body>
+</html>

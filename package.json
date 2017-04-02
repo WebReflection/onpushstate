@@ -1,0 +1,29 @@
+{
+  "name": "onpushstate",
+  "version": "0.0.0",
+  "description": "A seamless history manager with pushstate notification.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run minify && npm run size",
+    "minify": "uglifyjs index.js --comments=/^!/ --compress --mangle -o min.js",
+    "size": "cat index.js | wc -c;cat min.js | wc -c;gzip -c min.js | wc -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebReflection/onpushstate.git"
+  },
+  "keywords": [
+    "history",
+    "pushstate",
+    "popstate"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WebReflection/onpushstate/issues"
+  },
+  "homepage": "https://github.com/WebReflection/onpushstate#readme",
+  "devDependencies": {
+    "uglify-js": "^2.8.20"
+  }
+}
