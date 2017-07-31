@@ -15,11 +15,11 @@
 document.addEventListener('click', function (e) {
   // find the link node
   var target = e.target;
-  var closest = target.closest || function () {
-    while (target && target.nodeName !== 'A') target = target.parentNode;
+  var closest = target.closest || function (A) {
+    while (target && target.nodeName !== A) target = target.parentNode;
     return target;
   };
-  var anchor = closest.call(target, 'a');
+  var anchor = closest.call(target, 'A');
   if (
     // it was found
     anchor &&
