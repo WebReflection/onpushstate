@@ -16,7 +16,7 @@ document.addEventListener('click', function (e) {
   // find the link node
   var target = e.target;
   var closest = target.closest || function () {
-    while (target.nodeName !== 'A') target = target.parentNode;
+    while (target && target.nodeName !== 'A') target = target.parentNode;
     return target;
   };
   var anchor = closest.call(target, 'a');
