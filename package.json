@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "A seamless history manager with pushstate notification.",
   "main": "index.js",
+  "browser": "min.js",
   "scripts": {
     "build": "npm run minify && npm run size",
     "minify": "uglifyjs index.js --comments=/^!/ --compress --mangle -o min.js",
