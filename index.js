@@ -28,7 +28,10 @@ document.addEventListener('click', function (e) {
     // it's not a download
     !anchor.hasAttribute('download') &&
     // it's not a resource handled externally
-    anchor.getAttribute('rel') !== 'external'
+    anchor.getAttribute('rel') !== 'external' &&
+    // it's not a click with ctrl/shift/alt keys pressed
+    // => (let the browser do it's job instead)
+    !e.ctrlKey && !e.shiftKey && !e.altKey
   ) {
     // all states are simply fully resolved URLs
     // pushstate will be the new page with old one as state
