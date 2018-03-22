@@ -13,13 +13,13 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 document.addEventListener('click', function (e) {
-  // find the link node
-  var target = e.target;
-  var closest = target.closest || function (A) {
+  // find the link node (even if inside an opened Shadow DOM)
+  var target = e.target.shadowRoot ? e.path[0] : e.target;
+  // find the anchor
+  var anchor = (target.closest || function (A) {
     while (target && target.nodeName !== A) target = target.parentNode;
     return target;
-  };
-  var anchor = closest.call(target, 'A');
+  }).call(target, 'A');
   if (
     // it was found
     anchor &&
@@ -31,7 +31,7 @@ document.addEventListener('click', function (e) {
     anchor.getAttribute('rel') !== 'external' &&
     // it's not a click with ctrl/shift/alt keys pressed
     // => (let the browser do it's job instead)
-    !e.ctrlKey && !e.shiftKey && !e.altKey
+    !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey
   ) {
     // all states are simply fully resolved URLs
     // pushstate will be the new page with old one as state
