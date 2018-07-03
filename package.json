@@ -1,6 +1,6 @@
 {
   "name": "onpushstate",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A seamless history manager with pushstate notification.",
   "main": "index.js",
   "unpkg": "min.js",
