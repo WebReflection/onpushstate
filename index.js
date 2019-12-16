@@ -31,7 +31,9 @@ document.addEventListener('click', function (e) {
     anchor.getAttribute('rel') !== 'external' &&
     // it's not a click with ctrl/shift/alt keys pressed
     // => (let the browser do it's job instead)
-    !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey
+    !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey &&
+    // let empty links be (see issue #5)
+    anchor.href
   ) {
     // all states are simply fully resolved URLs
     // pushstate will be the new page with old one as state
